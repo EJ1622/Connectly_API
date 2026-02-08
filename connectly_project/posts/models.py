@@ -1,30 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.core.validators import MinLengthValidator
 
-class User(AbstractUser):
-    email = models.EmailField(unique=True)
-    bio = models.TextField(blank=True, null=True)
-
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='custom_users',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='custom_users_permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True, null=True, validators=[MinLengthValidator(10)])
+    created_at = models.DateTimeField(auto_now_add=True)
     
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    def __str__(self):
+        return f"{self.user.username}'s Profile"
 
 class Post(models.Model):
-    content = models.TextField(max_length=500)
+    content = models.TextField(max_length=500, validators=[MinLengthValidator(5)])
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -34,3 +21,15 @@ class Post(models.Model):
     
     def __str__(self):
         return f"{self.author.username}: {self.content[:50]}"
+
+class Comment(models.Model):
+    text = models.TextField(max_length=300, validators=[MinLengthValidator(3)])
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.author.username} on {self.post.id}"
