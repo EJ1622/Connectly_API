@@ -1,26 +1,33 @@
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.contrib.auth import get_user_model
-from .models import Post
-from .serializers import UserSerializer, PostSerializer
+from django.contrib.auth.models import User
+from .models import Post, Comment
+from .serializers import UserSerializer, PostSerializer, CommentSerializer
 
-User = get_user_model()
-
-# User CRUD
+# User Views
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-# Post CRUD  
+# Post Views
 class PostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-class PostRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class PostDetailView(generics.RetrieveAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+# Comment Views
+class CommentListCreateView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class CommentDetailView(generics.RetrieveAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
