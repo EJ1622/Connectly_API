@@ -69,14 +69,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Production settings.py
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-PASSWORD_HASHERS = ['django.contrib.auth.hashers.Argon2PasswordHasher']
-
 ROOT_URLCONF = 'connectly_project.urls'
 
 TEMPLATES = [

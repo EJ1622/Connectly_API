@@ -15,6 +15,19 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    POST_TYPES = (  # Move INSIDE class, before fields
+        ('text', 'Text'),
+        ('image', 'Image'),
+        ('video', 'Video'),
+    )
+    
+    content = models.TextField(max_length=500, validators=[MinLengthValidator(5)])
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    post_type = models.CharField(max_length=10, choices=POST_TYPES, default='text')  # Add here
+    metadata = models.JSONField(default=dict, blank=True)  # Add here
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         ordering = ['-created_at']

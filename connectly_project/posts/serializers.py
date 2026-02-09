@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from .models import Profile, Post, Comment
+from .models import Post, Comment
 
 User = get_user_model()
 
@@ -26,7 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ['id', 'content', 'author', 'created_at', 'updated_at', 'comments_count']
+        fields = ['id', 'content', 'author', 'post_type', 'metadata', 'created_at', 'updated_at', 'comments_count']
     
     def get_comments_count(self, obj):
         return obj.comments.count()
