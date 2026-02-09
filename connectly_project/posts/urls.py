@@ -1,20 +1,19 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
-    UserListCreateView, UserDetailView,
+    CustomTokenObtainPairView, UserListView,
     PostListCreateView, PostDetailView,
     CommentListCreateView, CommentDetailView
 )
 
 urlpatterns = [
-    # Users
-    path('users/', UserListCreateView.as_view(), name='user-list'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    # Authentication
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     
-    # Posts
+    # Protected endpoints
+    path('users/', UserListView.as_view(), name='user-list'),
     path('posts/', PostListCreateView.as_view(), name='post-list'),
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
-    
-    # Comments
     path('comments/', CommentListCreateView.as_view(), name='comment-list'),
     path('comments/<int:pk>/', CommentDetailView.as_view(), name='comment-detail'),
 ]
